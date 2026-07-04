@@ -37,6 +37,19 @@ describe('ServerComposer', () => {
     expect(screen.getByText('Mainframe')).toBeInTheDocument();
   });
 
+  it('shows Tower Server or 4U Rack Server for X86 + 524,288 (Example 3)', async () => {
+    const user = userEvent.setup();
+    render(<ServerComposer />);
+
+    await user.selectOptions(screen.getByLabelText(/cpu/i), 'X86');
+    await user.clear(screen.getByLabelText(/memory size/i));
+    await user.type(screen.getByLabelText(/memory size/i), '524,288');
+    await user.click(screen.getByRole('button', { name: /submit/i }));
+
+    expect(screen.getByText('Tower Server')).toBeInTheDocument();
+    expect(screen.getByText('4U Rack Server')).toBeInTheDocument();
+  });
+
   it('shows High Density for ARM + GPU + 524,288 (Example 4)', async () => {
     const user = userEvent.setup();
     render(<ServerComposer />);

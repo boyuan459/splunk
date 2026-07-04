@@ -73,6 +73,12 @@ provided examples.
 npm test
 ```
 
+### Testing single file once
+
+```bash
+npm test -- src/components/__tests__/ServerComposer.test.tsx
+```
+
 Coverage includes:
 
 - `domain/__tests__/validation.test.ts` — parsing, power-of-two, bounds, junk.
