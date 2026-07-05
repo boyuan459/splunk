@@ -6,8 +6,6 @@ interface GpuCheckboxProps {
 export function GpuCheckbox({ checked, onChange }: GpuCheckboxProps) {
   return (
     <div className="flex flex-col gap-1">
-      {/* Empty spacer the height of a field label, so the checkbox lines up with
-          the CPU/Memory inputs rather than their labels. */}
       <span aria-hidden className="text-xs font-medium uppercase tracking-wide">
         &nbsp;
       </span>
