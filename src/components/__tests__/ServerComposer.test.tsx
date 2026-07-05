@@ -88,6 +88,22 @@ describe('ServerComposer', () => {
     expect(screen.queryByText(/server model options/i)).not.toBeInTheDocument();
   });
 
+  it('hides a previous result as soon as any input is edited', async () => {
+    const user = userEvent.setup();
+    render(<ServerComposer />);
+
+    await user.selectOptions(screen.getByLabelText(/cpu/i), 'Power');
+    await user.clear(screen.getByLabelText(/memory size/i));
+    await user.type(screen.getByLabelText(/memory size/i), '262,144');
+    await user.click(screen.getByRole('button', { name: /submit/i }));
+    expect(screen.getByText(/server model options/i)).toBeInTheDocument();
+
+    // Changing the CPU invalidates the shown result — it should disappear until
+    // the user submits again.
+    await user.selectOptions(screen.getByLabelText(/cpu/i), 'X86');
+    expect(screen.queryByText(/server model options/i)).not.toBeInTheDocument();
+  });
+
   it('clears a previous result when a new submit fails validation', async () => {
     const user = userEvent.setup();
     render(<ServerComposer />);

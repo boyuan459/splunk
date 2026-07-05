@@ -21,10 +21,27 @@ export function ServerComposer() {
   const [error, setError] = useState<string | undefined>();
   const [result, setResult] = useState<ServerModel[] | null>(null);
 
+  // Any edit invalidates the last submission, so hide the previous result (and
+  // any stale error) until the user submits again. Keeps the output in sync with
+  // the form instead of describing a configuration that has since changed.
+  function dismissOutput() {
+    if (error) setError(undefined);
+    if (result !== null) setResult(null);
+  }
+
+  function handleCpuChange(next: Cpu) {
+    setCpu(next);
+    dismissOutput();
+  }
+
   function handleMemoryChange(raw: string) {
     setMemoryRaw(formatMemoryInput(raw));
-    // Dismiss any stale validation error the moment the user starts fixing it.
-    if (error) setError(undefined);
+    dismissOutput();
+  }
+
+  function handleGpuChange(next: boolean) {
+    setGpu(next);
+    dismissOutput();
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -50,13 +67,13 @@ export function ServerComposer() {
             memory field's error can grow without shifting the CPU or GPU column. */}
         <div className="grid grid-cols-12 items-start gap-x-6 gap-y-4">
           <div className="col-span-12 sm:col-span-3">
-            <CpuSelect value={cpu} onChange={setCpu} />
+            <CpuSelect value={cpu} onChange={handleCpuChange} />
           </div>
           <div className="col-span-12 sm:col-span-4">
             <MemoryInput value={memoryRaw} onChange={handleMemoryChange} error={error} />
           </div>
           <div className="col-span-12 sm:col-span-5">
-            <GpuCheckbox checked={gpu} onChange={setGpu} />
+            <GpuCheckbox checked={gpu} onChange={handleGpuChange} />
           </div>
         </div>
 
