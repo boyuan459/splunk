@@ -4,8 +4,9 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 
-export default tseslint.config(
+export default defineConfig(
   // Replaces .eslintignore — build output and deps are not linted.
   { ignores: ['dist', 'node_modules'] },
 
@@ -18,7 +19,9 @@ export default tseslint.config(
       reactRefresh.configs.vite,
     ],
     plugins: {
-      'react-hooks': reactHooks,
+      // Cast: react-hooks@7 types its `configs` in a shape TS doesn't accept as
+      // an ESLint Plugin, though it loads fine at runtime.
+      'react-hooks': /** @type {import('eslint').ESLint.Plugin} */ (reactHooks),
     },
     languageOptions: {
       ecmaVersion: 2022,

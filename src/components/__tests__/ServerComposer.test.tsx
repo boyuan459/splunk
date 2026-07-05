@@ -117,4 +117,22 @@ describe('ServerComposer', () => {
     await user.type(memory, '0');
     expect(screen.queryByText(/power of 2/i)).not.toBeInTheDocument();
   });
+
+  it('keeps the caret in place when editing mid-number', async () => {
+    const user = userEvent.setup();
+    render(<ServerComposer />);
+    const memory = screen.getByLabelText(/memory size/i) as HTMLInputElement;
+
+    await user.type(memory, '262144'); // shows "262,144"
+
+    // Move the caret to the very front, then type without re-clicking (a click
+    // would reset the caret to the end). keyboard() types at the current caret.
+    memory.focus();
+    memory.setSelectionRange(0, 0);
+    await user.keyboard('9');
+
+    expect(memory.value).toBe('9,262,144');
+    // Caret should sit just after the inserted "9", not jump to the end.
+    expect(memory.selectionStart).toBe(1);
+  });
 });
