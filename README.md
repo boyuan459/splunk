@@ -30,7 +30,8 @@ npm run dev      # start the dev server (http://localhost:5173)
 | `npm run test:watch`| Run tests in watch mode                      |
 | `npm run build`     | Type-check and produce a production build    |
 | `npm run preview`   | Preview the production build locally         |
-| `npm run lint`      | Type-check without emitting                  |
+| `npm run lint`      | Run ESLint over the project                  |
+| `npm run typecheck` | Type-check without emitting                  |
 
 ## How it works
 
